@@ -26,4 +26,5 @@ public class APITest {
                 .body("message", equalTo("Pet not found"))
                 .body("type", equalTo("error"));
     }
+
 }
