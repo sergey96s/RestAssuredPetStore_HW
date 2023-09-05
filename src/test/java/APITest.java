@@ -2,9 +2,13 @@ import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.lessThan;
 
 public class APITest {
     private final int unexistingPetId = 49841568;
@@ -27,4 +31,27 @@ public class APITest {
                 .body("type", equalTo("error"));
     }
 
+    @Test
+    public void newPetTest() {
+        Integer id = 11;
+        String name = "ddoogg";
+        String status = "sold";
+
+        Map<String, String> request = new HashMap<>();
+        request.put("id", id.toString());
+        request.put("name", name);
+        request.put("status", status);
+        given().contentType("application/json")
+                .body(request)
+                .when()
+                .post(baseURI + "pet/")
+                .then()
+                .log().all()
+                .assertThat()
+                .time(lessThan(2000L))
+                .statusCode(200)
+                .statusLine("HTTP/1.1 200 OK")
+                .body("id", equalTo(id))
+                .body("name", equalTo(name));
+    }
 }
