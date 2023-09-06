@@ -41,11 +41,11 @@ public class APINewTestBooks {
     public void bookNotFoundTest() {
         RestAssured.baseURI = "https://demoqa.com/BookStore/v1/";
         given().when()
-                .get(baseURI + "book/{ISBN}", unexistingBookISBN)
+                .get(baseURI + "Book?ISBN=" + unexistingBookISBN)
                 .then()
                 .log().all()
                 .statusCode(400)
-                .statusLine("HTTP/1.1 400 Error: Bad Request")
+                .statusLine("HTTP/1.1 400 Bad Request")
                 .body("code", equalTo("1205"))
                 .body("message", equalTo("ISBN supplied is not available in Books Collection!"));
     }
